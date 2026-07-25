@@ -74,6 +74,31 @@ class World {
 		requestAnimationFrame( this._loop );
 
 		window.addEventListener( 'beforeunload', () => this._autoSaveIfPlaying() );
+		this._bindFirstInteractionAudioUnlock();
+	}
+
+	// Browsers block audio until the first user gesture, so the menu-music
+	// call that fires when we transition to 'menu' at boot silently no-ops.
+	// Catch the very first click/keypress anywhere and (re)sync music to
+	// whatever the game is currently showing.
+	_bindFirstInteractionAudioUnlock() {
+		const handler = () => {
+			this.audio.unlock();
+			this.audio.setMusicVolume( this.save.getSettings().musicVolume );
+			this.audio.setSfxVolume( this.save.getSettings().sfxVolume );
+			this._syncMusicToState();
+			window.removeEventListener( 'pointerdown', handler );
+			window.removeEventListener( 'keydown', handler );
+		};
+		window.addEventListener( 'pointerdown', handler, { once: true } );
+		window.addEventListener( 'keydown', handler, { once: true } );
+	}
+
+	_syncMusicToState() {
+		if ( this.gameFSM.is( 'menu' ) || this.gameFSM.is( 'heroSelect' ) ) { this.audio.playMenuMusic(); return; }
+		if ( this.player && this.roomManager.currentRoomType ) {
+			this.audio.playBiomeMusic( this.roomManager.biome, this.roomManager.currentRoomType === 'boss' );
+		}
 	}
 
 	// ============================== HUD wiring ==============================

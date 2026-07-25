@@ -9,6 +9,7 @@ import * as THREE from 'three';
 import { FiniteStateMachine } from '../ai/FiniteStateMachine.js';
 import { Health } from './Health.js';
 import { distanceXZ } from '../ai/Steering.js';
+import { t } from '../core/I18n.js';
 
 export class Boss {
 
@@ -42,7 +43,7 @@ export class Boss {
 		] );
 		this.fsm.start( 'approach' );
 
-		world.hud.showBossBar( cfg.name );
+		world.hud.showBossBar( t( `bosses.${cfg.id}` ) );
 	}
 
 	_buildMesh() {

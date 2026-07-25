@@ -157,7 +157,10 @@ export class Player {
 		if ( moveVec.lengthSq() > 0 ) {
 			moveVec.normalize();
 			const forward = new THREE.Vector3( Math.sin( camYaw ), 0, Math.cos( camYaw ) );
-			const right = new THREE.Vector3( Math.cos( camYaw ), 0, -Math.sin( camYaw ) );
+			// Matches the camera's actual on-screen right (THREE's lookAt derives
+			// right = up × (eye-target), which works out to (-cos, 0, sin) here —
+			// using (cos, 0, -sin) instead silently swapped A and D.
+			const right = new THREE.Vector3( -Math.cos( camYaw ), 0, Math.sin( camYaw ) );
 			const world = new THREE.Vector3()
 				.addScaledVector( right, moveVec.x )
 				.addScaledVector( forward, -moveVec.z );
@@ -174,7 +177,7 @@ export class Player {
 			this._invulnTimer = 0.28;
 			const dir = moveVec.lengthSq() > 0 ? moveVec.clone() : new THREE.Vector3( 0, 0, 1 );
 			const forward = new THREE.Vector3( Math.sin( camYaw ), 0, Math.cos( camYaw ) );
-			const right = new THREE.Vector3( Math.cos( camYaw ), 0, -Math.sin( camYaw ) );
+			const right = new THREE.Vector3( -Math.cos( camYaw ), 0, Math.sin( camYaw ) );
 			this._dodgeDir.set( 0, 0, 0 ).addScaledVector( right, dir.x ).addScaledVector( forward, -dir.z ).normalize();
 		}
 	}

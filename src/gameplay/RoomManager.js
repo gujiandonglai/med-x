@@ -7,6 +7,7 @@
 
 import * as THREE from 'three';
 import { RUN_STRUCTURE, BIOMES, ENEMIES, BOSSES, ECOSYSTEM } from '../core/Config.js';
+import { t } from '../core/I18n.js';
 import { Boss } from './Boss.js';
 import { EcosystemAgent } from './EcosystemAgents.js';
 import { UpgradeSystem } from './UpgradeSystem.js';
@@ -63,6 +64,7 @@ export class RoomManager {
 		const roomType = this.isBossRoom ? 'boss' : this.roomGraph[ this.roomIndex ];
 		this.currentRoomType = roomType;
 		this.roomActive = true;
+		this.world.audio.playBiomeMusic( biome, roomType === 'boss' );
 
 		const layoutSeed = Math.random();
 		const arenaRadius = roomType === 'boss' ? 22 : 15 + Math.random() * 3;
@@ -73,7 +75,7 @@ export class RoomManager {
 		this._populateEnemies( arenaRadius, roomType, biome );
 		this._populatePickups( arenaRadius, roomType );
 
-		this.world.hud.setRunProgress( this.actNumber, this.roomNumber, ROOMS_PER_ACT, biome.name, roomType );
+		this.world.hud.setRunProgress( this.actNumber, this.roomNumber, ROOMS_PER_ACT, t( `biomes.${biome.id}` ), roomType );
 		eventBus.emit( 'room:enter', { act: this.actNumber, room: this.roomNumber, type: roomType } );
 
 		if ( roomType === 'supply' || roomType === 'shop' || roomType === 'event' ) {

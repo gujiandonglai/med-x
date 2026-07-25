@@ -16,7 +16,7 @@ export function createGameFSM( world ) {
 		},
 		{
 			name: 'menu',
-			enter: ( w ) => { w.hud.showMainMenu(); eventBus.emit( 'state:menu' ); },
+			enter: ( w ) => { w.hud.showMainMenu(); w.audio.playMenuMusic(); eventBus.emit( 'state:menu' ); },
 			exit: ( w ) => { w.hud.hideMainMenu(); },
 		},
 		{

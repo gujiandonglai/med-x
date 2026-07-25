@@ -53,10 +53,14 @@ export class EnvironmentBuilder {
 		floor.receiveShadow = true;
 		this.group.add( floor );
 
-		// Organic membrane wall ring (irregular radius per segment)
+		// Organic membrane wall ring (irregular radius per segment).
+		// Semi-transparent on purpose: the chase camera can end up outside
+		// the wall ring when the player backs up against the boundary, and
+		// an opaque wall there would hide the player/enemies entirely.
 		const wallMat = new THREE.MeshStandardMaterial( {
 			color: biome.wallColor, roughness: 0.6, metalness: 0.15,
 			emissive: biome.keyColor, emissiveIntensity: 0.08, side: THREE.DoubleSide,
+			transparent: true, opacity: 0.5,
 		} );
 		for ( let i = 0; i < wallSegments; i ++ ) {
 			const a0 = ( i / wallSegments ) * Math.PI * 2;
