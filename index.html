@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
+<title>病毒清理者 MED-X</title>
+<link rel="stylesheet" href="./style.css"/>
+
+<!--
+	Import map: resolves the bare "three" specifier (and the two addon
+	sub-paths) to the vendored copies under ./vendor/. Everything under
+	src/ imports three via `import * as THREE from 'three'` like a normal
+	npm project — no bundler needed, this is native browser ES modules.
+	Requires serving over http(s):// (see README) — file:// blocks module
+	imports via CORS in every major browser.
+-->
+<script type="importmap">
+{
+	"imports": {
+		"three": "./vendor/three.module.js",
+		"three/addons/postprocessing/": "./vendor/addons/postprocessing/",
+		"three/addons/shaders/": "./vendor/addons/shaders/"
+	}
+}
+</script>
+</head>
+<body>
+	<canvas id="game-canvas"></canvas>
+	<div id="ui-root"></div>
+
+	<noscript>MED-X 需要启用 JavaScript 才能运行 / MED-X requires JavaScript to run.</noscript>
+
+	<script type="module" src="./src/main.js"></script>
+</body>
+</html>
